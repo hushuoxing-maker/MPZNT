@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>黑金御所 | 全维名片设计器 + 20组大师方案库</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0806;
+            font-family: 'Inter', 'Segoe UI', 'PingFang SC', Roboto, system-ui, sans-serif;
+            color: #e9e3d5;
+            padding: 2rem;
+        }
+
+        /* 黑金主色调 */
+        :root {
+            --gold: #d4af37;
+            --gold-light: #f3e3a2;
+            --gold-dark: #a67c00;
+            --black-bg: #12100e;
+            --panel-bg: #1b1815;
+            --border-gold: rgba(212, 175, 55, 0.4);
+            --glow: 0 0 8px rgba(212, 175, 55, 0.3);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* 左右对称布局 */
+        .dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* 左侧配置区（滚动） */
+        .config-panel {
+            flex: 1.2;
+            min-width: 380px;
+            background: var(--panel-bg);
+            border-radius: 2rem;
+            border: 1px solid var(--border-gold);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05);
+            padding: 1.8rem 1.5rem;
+            backdrop-filter: blur(2px);
+            max-height: 85vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        /* 右侧预览区 */
+        .preview-panel {
+            flex: 1;
+            min-width: 400px;
+            background: linear-gradient(145deg, #151210, #0f0d0b);
+            border-radius: 2rem;
+            border: 1px solid var(--border-gold);
+            padding: 1.8rem;
+            box-shadow: var(--glow);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* 名片双面展示区 */
+        .cards-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.8rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .card-item {
+            background: transparent;
+            transition: transform 0.2s;
+        }
+
+        .card-face {
+            width: 290px;
+            height: 180px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 20px 30px -12px black, 0 0 0 1px rgba(212, 175, 55, 0.3);
+            position: relative;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .card-face.vertical {
+            width: 150px;
+            height: 230px;
+        }
+
+        .card-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            background: rgba(0,0,0,0.5);
+            display: inline-block;
+            width: fit-content;
+            padding: 2px 8px;
+            border-radius: 20px;
+            color: var(--gold-light);
+            margin-bottom: 8px;
+            backdrop-filter: blur(2px);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .logo-img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            background: #f5f0e0;
+            border-radius: 8px;
+            padding: 4px;
+        }
+
+        .company-name {
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .name-text {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 6px 0 2px;
+        }
+
+        .en-name {
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+        }
+
+        .position {
+            font-size: 10px;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .slogan {
+            font-size: 8px;
+            margin-top: 6px;
+            font-style: italic;
+        }
+
+        .contact-info {
+            font-size: 7px;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+
+        .qr-mock {
+            width: 44px;
+            height: 44px;
+            background: repeating-linear-gradient(45deg, #000, #000 4px, #333 4px, #333 8px);
+            border-radius: 8px;
+            margin-top: 5px;
+        }
+
+        .back-details {
+            font-size: 7px;
+            margin-top: 6px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--gold);
+            border-left: 3px solid var(--gold);
+            padding-left: 10px;
+            margin: 1.2rem 0 0.8rem 0;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .option-btn {
+            background: #2a2723;
+            border: 1px solid #44403c;
+            color: #ddd;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn.active {
+            background: var(--gold-dark);
+            border-color: var(--gold);
+            color: #0a0806;
+            box-shadow: 0 0 6px var(--gold);
+            font-weight: bold;
+        }
+
+        .input-field,
+        textarea {
+            background: #282521;
+            border: 1px solid #4a453e;
+            border-radius: 14px;
+            padding: 8px 14px;
+            width: 100%;
+            margin-bottom: 12px;
+            color: #f0ead8;
+            font-size: 0.8rem;
+        }
+
+        .row-2col {
+            display: flex;
+            gap: 12px;
+        }
+
+        .row-2col>div {
+            flex: 1;
+        }
+
+        .upload-box {
+            border: 1px dashed var(--gold);
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
+            margin-bottom: 12px;
+            background: #1f1b17;
+        }
+
+        .preview-tips {
+            background: #1c1915;
+            border-radius: 1rem;
+            padding: 1rem;
+            font-size: 0.7rem;
+            color: #cfc7b8;
+            border-top: 1px solid var(--gold);
+        }
+
+        .generate-prompt {
+            color: var(--gold-light);
+            font-family: monospace;
+            background: #0f0e0c;
+            padding: 8px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+        }
+
+        hr {
+            border-color: #3a342c;
+            margin: 0.5rem 0;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #d4af37, #b58e2e);
+            border: none;
+            color: #0a0806;
+            font-weight: bold;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            width: 100%;
+            margin-top: 8px;
+            letter-spacing: 1px;
+        }
+
+        .btn-gold:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, #e6c452, #c49f38);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+        }
+
+        /* 20组完整方案展示区 */
+        .full-gallery {
+            margin-top: 3rem;
+            background: #0f0d0b;
+            border-radius: 2rem;
+            border: 1px solid var(--border-gold);
+            padding: 2rem 1.5rem;
+            display: none;
+        }
+
+        .full-gallery.visible {
+            display: block;
+        }
+
+        .grid-20 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 1.8rem;
+            margin-top: 1.5rem;
+        }
+
+        .design-card {
+            background: #1b1815;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            transition: all 0.2s;
+        }
+
+        .design-card:hover {
+            border-color: var(--gold);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .mini-mockup {
+            background: #28241f;
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            border-bottom: 1px solid #3a342c;
+        }
+
+        .mini-card {
+            width: 140px;
+            height: 88px;
+            background: white;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 6px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .design-concept {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.6rem 1rem;
+            background: #25211c;
+            color: var(--gold-light);
+        }
+
+        .prompt-text {
+            font-size: 0.6rem;
+            padding: 0.6rem;
+            background: #12100c;
+            font-family: monospace;
+            color: #e2dccd;
+            border-top: 1px solid #3a342c;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+
+        .craft-tag {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.6rem;
+            display: flex;
+            gap: 6px;
+            background: #1f1d19;
+        }
+
+        .badge-icon {
+            margin-right: 6px;
+        }
+
+        @media (max-width: 980px) {
+            body {
+                padding: 1rem;
+            }
+
+            .config-panel,
+            .preview-panel {
+                min-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="flex-between" style="margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center;">
+        <h1 style="letter-spacing: 2px;"><i class="fas fa-crown" style="color: var(--gold);"></i> 黑金·名片御制所</h1>
+        <div><i class="fas fa-gem" style="color: var(--gold);"></i> 对称美学 | 全维配置</div>
+    </div>
+    <div class="dashboard">
+        <!-- 左侧配置区域 -->
+        <div class="config-panel">
+            <div class="section-title"><i class="fas fa-id-card"></i> 核心信息</div>
+            <div class="row-2col">
+                <input type="text" id="companyName" class="input-field" placeholder="公司名称" value="黑金万象设计">
+                <input type="text" id="brandName" class="input-field" placeholder="品牌名称" value="BLACKEN·GILD">
+            </div>
+            <div class="row-2col">
+                <input type="text" id="fullname" class="input-field" placeholder="姓名" value="陈 砚秋">
+                <input type="text" id="engName" class="input-field" placeholder="英文名" value="Yanqiu Chen">
+            </div>
+            <div class="row-2col">
+                <input type="text" id="position" class="input-field" placeholder="职位" value="创意总监">
+                <input type="text" id="slogan" class="input-field" placeholder="Slogan" value="极简即奢华">
+            </div>
+            <input type="text" id="subtitle" class="input-field" placeholder="副标题" value="当代东方美学研习者">
+            <textarea id="serviceDesc" rows="2" class="input-field" placeholder="服务介绍 / 业务范围">品牌咨询 · 高端视觉 · 御用工艺</textarea>
+            <div class="row-2col">
+                <input type="text" id="phone" class="input-field" placeholder="电话" value="+86 139 8888 2365">
+                <input type="text" id="email" class="input-field" placeholder="邮箱" value="yc@blackengold.com">
+            </div>
+            <div class="row-2col">
+                <input type="text" id="wechat" class="input-field" placeholder="微信ID" value="blackengold">
+                <input type="text" id="website" class="input-field" placeholder="网站" value="www.blacken.com">
+            </div>
+            <input type="text" id="address" class="input-field" placeholder="地址" value="上海市·外滩金融中心">
+            <div class="row-2col">
+                <input type="text" id="socialMedia" class="input-field" placeholder="社交媒体" value="IG: blackengold">
+                <input type="text" id="businessHours" class="input-field" placeholder="营业时间" value="10:00-19:00 预约制">
+            </div>
+            <!-- Logo上传 -->
+            <div class="upload-box">
+                <label><i class="fas fa-upload"></i> Logo 图框 (建议png透明)</label>
+                <input type="file" id="logoUpload" accept="image/*" style="margin-top: 8px; color: #ddd;">
+                <div id="logoPreview" style="margin-top: 8px; display: flex; justify-content: center;"></div>
+            </div>
+
+            <div class="section-title"><i class="fas fa-chart-line"></i> 行业属性</div>
+            <div class="button-group" id="industryGroup"></div>
+            <div class="section-title"><i class="fas fa-users"></i> 目标人群系统</div>
+            <div class="button-group" id="targetGroup"></div>
+            <div class="section-title"><i class="fas fa-palette"></i> 品牌气质系统</div>
+            <div class="button-group" id="tasteGroup"></div>
+            <div class="section-title"><i class="fas fa-star"></i> 名片风格系统</div>
+            <div class="button-group" id="styleGroup"></div>
+            <div class="section-title"><i class="fas fa-fill-drip"></i> 颜色系统</div>
+            <div class="button-group" id="colorGroup"></div>
+            <div class="section-title"><i class="fas fa-file-alt"></i> 材质 & 工艺系统</div>
+            <div class="button-group" id="materialGroup"></div>
+            <div class="button-group" id="craftGroup"></div>
+            <div class="section-title"><i class="fas fa-vector-square"></i> 结构布局 & 信息布局</div>
+            <div class="button-group" id="layoutOrientation"></div>
+            <div class="button-group" id="infoAlignGroup"></div>
+            <div class="section-title"><i class="fas fa-mobile-alt"></i> 正反面辅助</div>
+            <div class="button-group" id="backFeatureGroup"></div>
+            <small style="opacity:0.6">预览实时更新，支持二维码占位、Logo展示</small>
+        </div>
+
+        <!-- 右侧预览区 -->
+        <div class="preview-panel">
+            <div class="cards-showcase">
+                <div class="card-item">
+                    <div class="card-face" id="frontCard">
+                        <div class="card-label">正面 · 核心身份</div>
+                        <div id="frontDynamic"></div>
+                    </div>
+                </div>
+                <div class="card-item">
+                    <div class="card-face" id="backCard">
+                        <div class="card-label">反面 · 引流/转化</div>
+                        <div id="backDynamic"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="preview-tips">
+                <div class="flex-between"><strong><i class="fas fa-gem"></i> 智能设计建议 & 工艺</strong> <span id="activeStyleName">商务极简</span></div>
+                <div id="designConceptText" class="generate-prompt" style="margin-top: 8px;">概念：黑金秩序，烫金线条与深色艺术纸，尽显高端商务格调。</div>
+                <div id="promptPreview" class="generate-prompt" style="margin-top: 8px; font-size: 0.65rem;">✨ 完整中文提示词：名片样机，黑金奢华风格...待选配</div>
+                <div id="craftAdvice" style="margin-top: 6px; font-size:0.7rem;"><i class="fas fa-print"></i> 工艺建议：烫哑金 + 局部UV + 触感纸320g，安全出血≥3mm</div>
+            </div>
+
+            <!-- 生成20组按钮 -->
+            <button id="generate20Btn" class="btn-gold"><i class="fas fa-layer-group"></i> ✨ 生成完整20组名片方案 ✨</button>
+        </div>
+    </div>
+
+    <!-- 20组完整展示区（初始隐藏，点击后显示且永不隐藏） -->
+    <div id="fullGalleryContainer" class="full-gallery">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); padding-bottom: 0.5rem;">
+            <h2><i class="fas fa-crown"></i> 御制20组 · 全风格名片典藏</h2>
+            <span style="font-size: 0.7rem; color: var(--gold-light);">20套独立方案 | 不可折叠 | 全展示</span>
+        </div>
+        <div id="twentyGrid" class="grid-20"></div>
+    </div>
+
+    <div class="footer-note" style="margin-top: 2rem; text-align: center; font-size: 0.7rem; color: #8e7b5c;">
+        ⚡ 点击上方按钮立即呈现20组完整设计方案（每组含双面样机模拟、概念、全中文提示词及工艺建议）<br>
+        黑金视觉系统 | 所有方案基于专业印刷逻辑设计
+    </div>
+</div>
+
+<script>
+    // ---------- 20组完整名片数据（与大师设计一致）------------
+    const designs20 = [
+        { id: 1, name: "极简瑞士网格", concept: "无衬线字体 + 纵向信息流 + 棉白纸局部UV", prompt: "名片样机展示，极简瑞士平面设计风格，白色纯棉纸卡片，正面左侧大留白，右侧纵向对齐排列文字「[姓名]」「[职位]」「[公司名]」「[电话]」，灰色无衬线小字，局部UV清漆凸起效果，柔和自然光左上角照射，平视角度的立体透视图，背景纯灰白色光滑桌面，写实摄影，双面展示（正面与背面并排），背面仅凹印极简徽标。", craft: "棉纸320g，局部UV凸起，圆角3mm，文字距边≥4mm", frontBg: "#fff", backDesc: "留白仅Logo烫透", styleHint: "留白网格" },
+        { id: 2, name: "Art Deco 奢华烫金", concept: "墨绿底＋烫金几何纹，击凸线条，稳重仪式感", prompt: "名片样机展示，装饰艺术风格，墨绿色粗纹艺术纸正面居中偏上位置烫金大号字「[姓名]」，下方烫金小字「[职位]」与「[公司名]」，背景布满细腻金色几何线条，背面纯色底压印金色徽章，左侧窗光模拟奢华礼盒氛围，一只手持名片局部，背景暗哑，写实摄影，双面正立面平铺。", craft: "墨绿环保艺术纸350g，烫金(哑金/亮金可选)，击凸Logo，圆角5mm，安全区4mm", frontBg: "#1e3a2f", backDesc: "金色Logo压印+细金线框" },
+        { id: 3, name: "工业复古混凝土", concept: "水泥质感纸＋粗糙肌理，丝网印刷铅字风格", prompt: "名片展示，工业复古风格，水泥色特种纸，粗糙触感，正面左侧丝网印刷铅字效果「[姓名]」「[职位]」，右侧斑驳手写体数字，背面仿旧工厂印章标志，暖黄钨丝灯光，轻微颗粒噪点，平视双面样机，背景纯灰水泥灰，极清摄影。", craft: "再生灰板纸360g，丝印哑光黑，模切不规则圆角，文字离边5mm", frontBg: "#b9afa3", backDesc: "仿油墨印标号＋手写编号" },
+        { id: 4, name: "科技未来感", concept: "透明塑料PET + 镭射银字体，全息光效", prompt: "名片样机，科技未来感设计，透明PET材质卡片，正面镭射银字体「[姓名]」「[公司名]」，全息幻彩光泽，背面电路板纹理若隐若现，双面并排展示，透明材质透出背景，冷蓝色调光，立体透视，背景纯黑绒面，写实摄影。", craft: "0.4mm透明PET，UV白墨+镭射烫银，圆角2mm", frontBg: "linear-gradient(135deg, rgba(10,20,40,0.7), rgba(0,30,50,0.8))", backDesc: "半透芯片纹路＋二维码区域" },
+        { id: 5, name: "自然环保 种子纸", concept: "草浆纸嵌入草籽，柔和水彩手绘，大地色系", prompt: "名片样机，环保自然风格，米色种子纸卡片，表面可见植物纤维，正面水彩手绘叶脉纹路，手写体「[姓名]」「[职位]」大地色系，背面留白区域点缀小野花插图，柔和日光，平视双面展示，背景纯燕麦色。", craft: "种子纸(可种植)，大豆油墨印刷，不覆膜，毛边出血6mm", frontBg: "#e9e0cf", backDesc: "植物插画＋种植说明" },
+        { id: 6, name: "东方禅意 中国风", concept: "宣纸肌理＋朱砂印章，竖排繁体书法", prompt: "名片展示，中国风水墨意境，宣纸纹理特种纸，竖排书法字体「[姓名]」朱砂红印章压脚，背面水墨淡远山图，左侧檀木光影，双面正立并排，背景纯亚麻色，极简写实。", craft: "宣纸艺术纸250g，烫哑红印，手工毛边，安全距5mm", frontBg: "#faf3e0", backDesc: "水墨山水留白落款" },
+        { id: 7, name: "孟菲斯玩乐主义", concept: "几何色块＋波点，荧光粉蓝撞色，局部磨砂UV", prompt: "名片样机，孟菲斯设计风格，彩色几何拼贴卡片，荧光粉和明黄碰撞，黑色粗体字「[姓名]」，背面波点与趣味装饰，磨砂UV触感，自然光漫射，双面平视，背景纯白光滑。", craft: "白卡纸350g，大面积磨砂UV，圆角5mm", frontBg: "linear-gradient(135deg, #ff90b3, #5df2f1)", backDesc: "抽象波浪＋趣味表情" },
+        { id: 8, name: "少女手绘 插画风", concept: "淡粉水彩花卉＋手写赞美词，柔软触感", prompt: "名片展示，少女手绘插画风格，柔粉色水彩纸卡片，正面手绘玫瑰藤蔓，手写字体「[姓名]」与可爱符号，背面唇印涂鸦，柔和窗光，双面展示，背景纯暖灰色，写实摄影。", craft: "棉浆纸280g，局部上光油，圆角6mm", frontBg: "#ffe4f3", backDesc: "爱心涂鸦与手写" },
+        { id: 9, name: "黑金奢华 高级定制", concept: "纯黑底+烫金细线 + 星芒压纹", prompt: "名片样机，奢华黑金风格，纯黑色天鹅绒质感艺术纸，正面烫金细线装饰，中央金色凸印「[姓名]」，背面暗纹压印图腾，侧逆光丝绒质感，双面并排展示，背景纯深灰。", craft: "黑色触感纸400g，烫金+击凸，圆角方形，文字远离边缘5mm", frontBg: "#111", backDesc: "暗花底纹＋烫金家族徽章" },
+        { id: 10, name: "日式侘寂 手漉和纸", concept: "原生纸浆纤维 + 枯山水排版，淡漠色", prompt: "名片展示，日式侘寂美学，手漉和纸材质，正面枯山水沙纹底，细长无衬线日汉字「[姓名]」靠左，背面一句俳句排印，柔和阴翳光线，双面平铺，背景纯米色，超写实。", craft: "和纸240g，水性印刷，毛边烧边，安全距4mm", frontBg: "#ece4d7", backDesc: "手写俳句, 泥金点" },
+        { id: 11, name: "波普普普 漫画网点", concept: "本戴网点+对话气泡，高饱和度红黄", prompt: "名片样机，波普艺术风格，亮黄底+红蓝网点，正面黑色粗边框对话框内含「[姓名]」，背面「POP！」大字号丝印，高对比棚拍光，双面展示，背景纯珊瑚粉，高清摄影。", craft: "白卡纸350g，UV光油，圆角，文字≥3mm避免网点干扰", frontBg: "#f7d44a", backDesc: "夸张拟声词与爆炸框" },
+        { id: 12, name: "瑞士超精密工业", concept: "等线字体，参数化网格，银色金属拉丝质感", prompt: "名片展示，精密工业风格，银色金属拉丝铝板质感卡片，正面细等线体信息「[姓名]」「[职位]」格线对齐，背面哑光黑条码区，冷色顶光，双面并排样机，背景纯深灰。", craft: "金属拉丝复合卡，腐蚀填字工艺", frontBg: "repeating-linear-gradient(45deg, #aaa, #aaa 2px, #ccc 2px, #ccc 6px)", backDesc: "参数标记与QR码区" },
+        { id: 13, name: "咖啡餐饮 复古菜单", concept: "牛皮纸+旧菜单字体，圆角做旧", prompt: "名片样机，复古餐饮风格，牛皮纸再生纸，正面仿旧式衬线字体「[姓名]」「[职位]」，脏咖啡渍边缘，背面手绘咖啡拉花图案，暖黄台灯光，双面正立面，背景纯暖米色。", craft: "牛皮纸300g，丝印深棕，做旧模切不规则边", frontBg: "#c6a664", backDesc: "咖啡渍晕染＋手绘咖啡杯" },
+        { id: 14, name: "科技初创 霓虹光线", concept: "深蓝底＋霓虹紫光灯效，动态倾斜排版", prompt: "名片展示，赛博朋克科技感，深蓝色磨砂塑料卡片，正面霓虹紫与青色光带交叉，倾斜字体「[姓名]」，背面发光的电路边框，暗场加紫色侧光，双面样机，背景纯午夜蓝，写实。", craft: "透明磨砂PVC 0.38mm，UV夜光墨或荧光色", frontBg: "#0b1120", backDesc: "发光线框 + 未来接口图" },
+        { id: 15, name: "医师/医疗专业", concept: "洁净白＋柔和蓝十字，哑膜抗菌触感", prompt: "名片样机，现代医疗洁净风格，纯白珠光纸卡片，正面左上角淡蓝十字图案，无衬线字体「[姓名]」「[医生]」信息居中，背面心电图波纹简约元素，柔光箱打光，双面展示，背景纯白色。", craft: "珠光纸350g，哑膜，圆角，文字距边3mm", frontBg: "#fff", backDesc: "生命波纹线＋诊所信息" },
+        { id: 16, name: "建筑师 / 蓝图风格", concept: "蓝晒效果+ 基准线，半透明硫酸纸", prompt: "名片样机，建筑蓝图风格，半透明硫酸纸卡片，正面蓝晒图底纹，白色工程线，粗体手写字「[姓名]」，背面比例尺与轴测小图标，平面双面透视，背景纯浅灰。", craft: "硫酸纸120g，蓝色墨粉印刷，热压平", frontBg: "#cfe0f5", backDesc: "比例尺＋轴测小图" },
+        { id: 17, name: "奢侈美妆 渐层唇釉", concept: "亚克力材质＋粉红渐层，局部镜面银", prompt: "名片样机，美妆奢侈风格，亚克力透明渐层卡片，从柔粉到透明渐变，正面优雅手写体「[姓名]」镜面银，背面唇印凹凸烫印，双面并排展示，柔光纯白背景，写实摄影。", craft: "亚克力双面磨砂+渐变UV印，烫镜面银", frontBg: "radial-gradient(circle at 0% 30%, #ffb7c5, #fff0f5)", backDesc: "镜面银Logo + 唇印烫印" },
+        { id: 18, name: "律师事务所 威严秩序", concept: "深藏青+压印线条，经典竖向排，钢印效果", prompt: "名片展示，法律权威风格，深藏青绒面纸卡片，正面左侧烫哑金线条，竖排「[姓名]」，「[职位]」靠右，背面天平暗纹，凝重顶光，双面平视，背景纯黑灰。", craft: "触感纸320g，烫金+钢印压凹，圆角5mm", frontBg: "#13223b", backDesc: "天平暗纹 + 道德誓言金句" },
+        { id: 19, name: "艺术画廊 / 展览", concept: "巨幅留白 + 细线索引，无涂层艺术纸", prompt: "名片样机，极简画廊风格，无涂布艺术纸，正面仅中间细线灰色字体「[姓名]」，大量留白，背面微型木刻版画，自然光漫反射，双面并排，背景纯米灰，写实摄影。", craft: "无酸艺术纸300g，柔印黑墨，圆角3mm", frontBg: "#f2efe7", backDesc: "展览日期 + 微型版画" },
+        { id: 20, name: "趣味 3D 视错觉", concept: "立体几何折纸风格，动态倾斜视错", prompt: "名片样机，视错觉趣味风格，卡片表面三维几何色块交错，中央白色粗体字「[姓名]」像悬浮空中，背面迷宫格漂浮字母，棚拍硬光产生立体感，双面展示，背景纯浅蓝灰。", craft: "高白滑面卡360g，大面积逆向上光，模切斜角", frontBg: "conic-gradient(from 90deg at 50% 50%, #ff6b6b, #4ecdc4, #ffe66d, #ff6b6b)", backDesc: "迷宫格和漂浮字母" }
+    ];
+
+    // 渲染20组完整方案
+    function renderTwentyGroups() {
+        const container = document.getElementById('twentyGrid');
+        if (!container) return;
+        container.innerHTML = '';
+        designs20.forEach(d => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'design-card';
+            // 双面样机简化但保留质感
+            cardDiv.innerHTML = `
+                <div class="mini-mockup">
+                    <div class="mini-card" style="background: ${d.frontBg}; color:#1a1a1a; background-size:cover; overflow:hidden;">
+                        <div style="font-weight:bold; font-size:8px;">[${d.name.split(' ')[0]}]</div>
+                        <div style="font-size:6px;">[姓名]<br>[职位]</div>
+                    </div>
+                    <div class="mini-card" style="background:#1a1714; color:#d4af37; border:1px solid #b38f40;">
+                        <div style="font-size:7px;">✨ 反面·${d.backDesc.substring(0,18)}</div>
+                        <div style="font-size:6px;">二维码 ｜ 社交入口</div>
+                    </div>
+                </div>
+                <div class="design-concept">🎴 概念：${d.concept}</div>
+                <div class="prompt-text"><strong>📝 提示词：</strong>${d.prompt.substring(0, 130)}…</div>
+                <div class="craft-tag"><i class="fas fa-print"></i> 工艺建议：${d.craft} | 安全区≥3mm</div>
+            `;
+            container.appendChild(cardDiv);
+        });
+    }
+
+    // ----- 原有配置器逻辑 -----
+    const industries = ["金融","律师","投资","企业服务","咨询","科技","AI","区块链","餐饮","美容","美甲","健身","服装","烟酒","茶馆","汽修","建筑","室内","摄影","艺术家","插画","美陈","珠宝","风水","命理","道家","茶文化","香道","豪宅","私人会所","高定","奢侈品","游艇","红酒","DJ","潮牌","电竞","自媒体","街头文化"];
+    const targets = ["企业老板","年轻女性","高净值客户","家庭用户","宝妈","Z世代","政府客户","投资人","外国客户","高端圈层","艺术圈","本地客户","游客客户"];
+    const tastes = ["高级","极简","东方","科技","潮流","未来感","国潮","轻奢","暗黑","温暖","女性化","商务正式","艺术感","自然系","机械风","朋克","禅意","新中式","赛博朋克","苹果风","MUJI风","北欧","巴洛克","包豪斯"];
+    const styles = ["商务极简","高端轻奢","国潮新中式","科技未来风","潮流视觉风","女性高级风","艺术设计风","IP卡通风","门店引流风","社交裂变风"];
+    const colors = ["商务黑金","深蓝银灰","科技电光蓝","紫渐变","深空黑","奶油白","豆沙粉","香槟金","中国红","墨黑玉石绿","哑光黑","古铜金","深咖啡"];
+    const materials = ["铜版纸","哑粉纸","特种纸","珠光纸","棉纸","触感纸","牛皮纸","艺术纸","磨砂纸","透明PVC","亚克力","金属名片","木质名片"];
+    const crafts = ["烫金","烫银","UV","凹凸压印","浮雕","镂空","激光雕刻","局部UV","边缘镀金","双层拼接","半透明","磁吸结构"];
+    const orientations = ["横版经典","竖版雅致","方形当代","超长奢华","异形先锋"];
+    const aligns = ["左对齐","居中对齐","极简留白","几何分割","模块化","杂志式"];
+    const backFeatures = ["二维码引流","业务介绍","服务范围","地图指引","IP形象","Slogan放大","社交裂变","微信入口","AI助手","小程序入口"];
+
+    let selectedIndustry = [], selectedTarget = [], selectedTaste = [];
+    let selectedStyle = "商务极简", selectedColor = "商务黑金", selectedMaterial = "触感纸", selectedCraft = "烫金", selectedOrientation = "横版经典", selectedAlign = "左对齐", selectedBackFeature = "二维码引流";
+    let windowLogoDataUrl = '';
+
+    function renderButtonGroup(containerId, items, multiSelect = true, callbackName) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = '';
+        items.forEach(item => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.textContent = item;
+            if (!multiSelect && eval(`selected${callbackName.charAt(0).toUpperCase() + callbackName.slice(1)}`) === item) btn.classList.add('active');
+            if (multiSelect && callbackName === 'industry' && selectedIndustry.includes(item)) btn.classList.add('active');
+            if (multiSelect && callbackName === 'target' && selectedTarget.includes(item)) btn.classList.add('active');
+            if (multiSelect && callbackName === 'taste' && selectedTaste.includes(item)) btn.classList.add('active');
+            btn.addEventListener('click', () => {
+                if (multiSelect) {
+                    if (callbackName === 'industry') selectedIndustry = selectedIndustry.includes(item) ? selectedIndustry.filter(i => i !== item) : [...selectedIndustry, item];
+                    if (callbackName === 'target') selectedTarget = selectedTarget.includes(item) ? selectedTarget.filter(t => t !== item) : [...selectedTarget, item];
+                    if (callbackName === 'taste') selectedTaste = selectedTaste.includes(item) ? selectedTaste.filter(ta => ta !== item) : [...selectedTaste, item];
+                    renderButtonGroup(containerId, items, true, callbackName);
+                } else {
+                    if (callbackName === 'style') selectedStyle = item;
+                    if (callbackName === 'color') selectedColor = item;
+                    if (callbackName === 'material') selectedMaterial = item;
+                    if (callbackName === 'craft') selectedCraft = item;
+                    if (callbackName === 'orientation') selectedOrientation = item;
+                    if (callbackName === 'align') selectedAlign = item;
+                    if (callbackName === 'backfeature') selectedBackFeature = item;
+                    renderButtonGroup(containerId, items, false, callbackName);
+                }
+                updatePreviewAndPrompt();
+            });
+            container.appendChild(btn);
+        });
+    }
+
+    function getFormData() {
+        return {
+            company: document.getElementById('companyName').value, brand: document.getElementById('brandName').value,
+            name: document.getElementById('fullname').value, enName: document.getElementById('engName').value,
+            position: document.getElementById('position').value, slogan: document.getElementById('slogan').value,
+            subtitle: document.getElementById('subtitle').value, service: document.getElementById('serviceDesc').value,
+            phone: document.getElementById('phone').value, email: document.getElementById('email').value,
+            wechat: document.getElementById('wechat').value, website: document.getElementById('website').value,
+            address: document.getElementById('address').value, social: document.getElementById('socialMedia').value,
+            hours: document.getElementById('businessHours').value, logoUrl: windowLogoDataUrl
+        };
+    }
+
+    function updatePreviewAndPrompt() {
+        const data = getFormData();
+        const frontDiv = document.getElementById('frontDynamic');
+        const backDiv = document.getElementById('backDynamic');
+        const frontCardEl = document.getElementById('frontCard');
+        const backCardEl = document.getElementById('backCard');
+        const isVertical = selectedOrientation.includes('竖版');
+        if (isVertical) { frontCardEl.classList.add('vertical'); backCardEl.classList.add('vertical'); } else { frontCardEl.classList.remove('vertical'); backCardEl.classList.remove('vertical'); }
+        let bgStyle = "background: #faf7f0; color:#1f1e1a;";
+        if (selectedStyle === "高端轻奢" || selectedColor.includes("黑金")) bgStyle = "background: radial-gradient(ellipse at 30% 40%, #1f1b17, #0c0a08); color:#e7dbbc; border:1px solid #d4af37;";
+        if (selectedStyle === "国潮新中式") bgStyle = "background: #e9e2cf; color:#4c3b2b;";
+        frontCardEl.style.cssText = bgStyle + '; padding:12px 14px;';
+        backCardEl.style.cssText = bgStyle + '; padding:12px 14px;';
+        const logoHtml = windowLogoDataUrl ? `<img src="${windowLogoDataUrl}" class="logo-img">` : '<div class="logo-img" style="background:#c5b888;"><i class="fas fa-crown"></i></div>';
+        frontDiv.innerHTML = `<div style="display:flex; gap:8px; margin-bottom:8px;">${logoHtml}<div><div class="company-name">${data.company}</div><div class="en-name">${data.brand}</div></div></div><div class="${selectedAlign === '居中对齐' ? 'text-center' : ''}"><div class="name-text">${data.name}</div><div class="en-name">${data.enName}</div><div class="position">${data.position}</div><div class="slogan">“${data.slogan}”</div><div class="contact-info">📞 ${data.phone}  ✉️ ${data.email}</div></div>`;
+        backDiv.innerHTML = `<div style="margin-bottom:6px;"><i class="fas fa-star-of-life"></i> ${data.subtitle}</div><div>${data.address}</div><div class="qr-mock"></div><div>${selectedBackFeature}入口</div>`;
+        document.getElementById('designConceptText').innerHTML = `概念：${selectedStyle}+${selectedColor}+${selectedMaterial}+${selectedCraft}`;
+        document.getElementById('craftAdvice').innerHTML = `工艺建议：${selectedMaterial} ${selectedCraft}，安全区3mm`;
+    }
+
+    document.getElementById('logoUpload')?.addEventListener('change', function(e) {
+        if (e.target.files[0]) { const reader = new FileReader(); reader.onload = ev => { windowLogoDataUrl = ev.target.result; updatePreviewAndPrompt(); }; reader.readAsDataURL(e.target.files[0]); } else { windowLogoDataUrl = ''; updatePreviewAndPrompt(); }
+    });
+    function bindInputs() { ['companyName','brandName','fullname','engName','position','slogan','subtitle','serviceDesc','phone','email','wechat','website','address','socialMedia','businessHours'].forEach(id => { const el = document.getElementById(id); if(el) el.addEventListener('input', () => updatePreviewAndPrompt()); }); }
+    function initGroups() {
+        renderButtonGroup('industryGroup', industries, true, 'industry');
+        renderButtonGroup('targetGroup', targets, true, 'target');
+        renderButtonGroup('tasteGroup', tastes, true, 'taste');
+        renderButtonGroup('styleGroup', styles, false, 'style');
+        renderButtonGroup('colorGroup', colors, false, 'color');
+        renderButtonGroup('materialGroup', materials, false, 'material');
+        renderButtonGroup('craftGroup', crafts, false, 'craft');
+        renderButtonGroup('layoutOrientation', orientations, false, 'orientation');
+        renderButtonGroup('infoAlignGroup', aligns, false, 'align');
+        renderButtonGroup('backFeatureGroup', backFeatures, false, 'backfeature');
+        updatePreviewAndPrompt();
+    }
+    bindInputs(); initGroups();
+
+    // 生成20组按钮事件
+    document.getElementById('generate20Btn').addEventListener('click', () => {
+        const gallery = document.getElementById('fullGalleryContainer');
+        if (!gallery.classList.contains('visible')) {
+            renderTwentyGroups();
+            gallery.classList.add('visible');
+        } else {
+            // 如果已经显示，确保仍然全部可见（不做隐藏）但为了符合“不能隐藏”，无关闭动作
+            // 若已可见，再次点击可重新渲染确保最新
+            renderTwentyGroups();
+        }
+        gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+</script>
+</body>
+</html>
