@@ -299,18 +299,14 @@
             box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
         }
 
-        /* 20组完整方案展示区 */
+        /* 20组完整方案展示区 - 始终可见区域 */
         .full-gallery {
             margin-top: 3rem;
             background: #0f0d0b;
             border-radius: 2rem;
             border: 1px solid var(--border-gold);
             padding: 2rem 1.5rem;
-            display: none;
-        }
-
-        .full-gallery.visible {
-            display: block;
+            transition: all 0.2s;
         }
 
         .grid-20 {
@@ -354,6 +350,7 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            color: #1f1e1a;
         }
 
         .design-concept {
@@ -381,6 +378,7 @@
             display: flex;
             gap: 6px;
             background: #1f1d19;
+            color: #bba77a;
         }
 
         .badge-icon {
@@ -492,23 +490,26 @@
         </div>
     </div>
 
-    <!-- 20组完整展示区（初始隐藏，点击后显示且永不隐藏） -->
+    <!-- 20组完整展示区（始终存在，初始为空，点击按钮后填充内容，绝不隐藏） -->
     <div id="fullGalleryContainer" class="full-gallery">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); padding-bottom: 0.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--gold); padding-bottom: 0.5rem; margin-bottom: 1rem;">
             <h2><i class="fas fa-crown"></i> 御制20组 · 全风格名片典藏</h2>
-            <span style="font-size: 0.7rem; color: var(--gold-light);">20套独立方案 | 不可折叠 | 全展示</span>
+            <span style="font-size: 0.7rem; color: var(--gold-light);">点击上方按钮后展示20套独立方案 | 全部可见</span>
         </div>
-        <div id="twentyGrid" class="grid-20"></div>
+        <div id="twentyGrid" class="grid-20">
+            <!-- 初始为空，等待生成 -->
+            <div style="grid-column:1/-1; text-align:center; color:#a58e62; padding:3rem;">✨ 点击右侧「生成完整20组名片方案」按钮，即刻呈现全部大师级设计 ✨</div>
+        </div>
     </div>
 
     <div class="footer-note" style="margin-top: 2rem; text-align: center; font-size: 0.7rem; color: #8e7b5c;">
-        ⚡ 点击上方按钮立即呈现20组完整设计方案（每组含双面样机模拟、概念、全中文提示词及工艺建议）<br>
+        ⚡ 点击按钮立即呈现20组完整设计方案（每组含双面样机模拟、概念、全中文提示词及工艺建议）<br>
         黑金视觉系统 | 所有方案基于专业印刷逻辑设计
     </div>
 </div>
 
 <script>
-    // ---------- 20组完整名片数据（与大师设计一致）------------
+    // ---------- 20组完整名片数据（专业大师级方案，差异化，双面展示）------------
     const designs20 = [
         { id: 1, name: "极简瑞士网格", concept: "无衬线字体 + 纵向信息流 + 棉白纸局部UV", prompt: "名片样机展示，极简瑞士平面设计风格，白色纯棉纸卡片，正面左侧大留白，右侧纵向对齐排列文字「[姓名]」「[职位]」「[公司名]」「[电话]」，灰色无衬线小字，局部UV清漆凸起效果，柔和自然光左上角照射，平视角度的立体透视图，背景纯灰白色光滑桌面，写实摄影，双面展示（正面与背面并排），背面仅凹印极简徽标。", craft: "棉纸320g，局部UV凸起，圆角3mm，文字距边≥4mm", frontBg: "#fff", backDesc: "留白仅Logo烫透", styleHint: "留白网格" },
         { id: 2, name: "Art Deco 奢华烫金", concept: "墨绿底＋烫金几何纹，击凸线条，稳重仪式感", prompt: "名片样机展示，装饰艺术风格，墨绿色粗纹艺术纸正面居中偏上位置烫金大号字「[姓名]」，下方烫金小字「[职位]」与「[公司名]」，背景布满细腻金色几何线条，背面纯色底压印金色徽章，左侧窗光模拟奢华礼盒氛围，一只手持名片局部，背景暗哑，写实摄影，双面正立面平铺。", craft: "墨绿环保艺术纸350g，烫金(哑金/亮金可选)，击凸Logo，圆角5mm，安全区4mm", frontBg: "#1e3a2f", backDesc: "金色Logo压印+细金线框" },
@@ -532,35 +533,54 @@
         { id: 20, name: "趣味 3D 视错觉", concept: "立体几何折纸风格，动态倾斜视错", prompt: "名片样机，视错觉趣味风格，卡片表面三维几何色块交错，中央白色粗体字「[姓名]」像悬浮空中，背面迷宫格漂浮字母，棚拍硬光产生立体感，双面展示，背景纯浅蓝灰。", craft: "高白滑面卡360g，大面积逆向上光，模切斜角", frontBg: "conic-gradient(from 90deg at 50% 50%, #ff6b6b, #4ecdc4, #ffe66d, #ff6b6b)", backDesc: "迷宫格和漂浮字母" }
     ];
 
-    // 渲染20组完整方案
+    // 渲染20组完整方案 (强制覆盖并显示)
     function renderTwentyGroups() {
         const container = document.getElementById('twentyGrid');
-        if (!container) return;
+        if (!container) {
+            console.warn("未找到 twentyGrid 容器");
+            return;
+        }
+        // 清空并填充新卡片
         container.innerHTML = '';
         designs20.forEach(d => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'design-card';
-            // 双面样机简化但保留质感
+            // 处理背景色 (适配linear-gradient或纯色)
+            let frontBgStyle = d.frontBg;
+            if (frontBgStyle && (frontBgStyle.includes('linear-gradient') || frontBgStyle.includes('conic-gradient') || frontBgStyle.includes('radial-gradient'))) {
+                frontBgStyle = frontBgStyle;
+            } else if (frontBgStyle && !frontBgStyle.includes('gradient')) {
+                frontBgStyle = frontBgStyle;
+            } else {
+                frontBgStyle = '#1e1e1e';
+            }
             cardDiv.innerHTML = `
                 <div class="mini-mockup">
-                    <div class="mini-card" style="background: ${d.frontBg}; color:#1a1a1a; background-size:cover; overflow:hidden;">
-                        <div style="font-weight:bold; font-size:8px;">[${d.name.split(' ')[0]}]</div>
-                        <div style="font-size:6px;">[姓名]<br>[职位]</div>
+                    <div class="mini-card" style="background: ${frontBgStyle}; color:#111; background-size:cover; overflow:hidden; border: 1px solid rgba(212,175,55,0.4);">
+                        <div style="font-weight:bold; font-size:8px; color:${d.id===9?'#d4af37':'#1a1a1a'}">✨ ${d.name.split(' ')[0]}</div>
+                        <div style="font-size:7px; margin-top:4px;">[姓名]</div>
+                        <div style="font-size:6px;">[职位] | [公司]</div>
                     </div>
-                    <div class="mini-card" style="background:#1a1714; color:#d4af37; border:1px solid #b38f40;">
-                        <div style="font-size:7px;">✨ 反面·${d.backDesc.substring(0,18)}</div>
-                        <div style="font-size:6px;">二维码 ｜ 社交入口</div>
+                    <div class="mini-card" style="background:#1c1915; color:#d4af37; border:1px solid #b38f40;">
+                        <div style="font-size:7px; font-weight:bold;">📌 反面策略</div>
+                        <div style="font-size:6px;">${d.backDesc.substring(0, 28)}</div>
+                        <div style="font-size:5px; margin-top:4px;">◉ 二维码 / 社交裂变</div>
                     </div>
                 </div>
                 <div class="design-concept">🎴 概念：${d.concept}</div>
-                <div class="prompt-text"><strong>📝 提示词：</strong>${d.prompt.substring(0, 130)}…</div>
-                <div class="craft-tag"><i class="fas fa-print"></i> 工艺建议：${d.craft} | 安全区≥3mm</div>
+                <div class="prompt-text"><strong>📝 中文提示词 (AI绘画)</strong><br>${d.prompt.substring(0, 150)}…</div>
+                <div class="craft-tag"><i class="fas fa-print"></i> 印刷工艺：${d.craft} | 安全线 ≥3mm</div>
             `;
             container.appendChild(cardDiv);
         });
+        // 确保可见区域自动滚动一点
+        const gallery = document.getElementById('fullGalleryContainer');
+        if (gallery) {
+            gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
-    // ----- 原有配置器逻辑 -----
+    // ---------- 原有配置器逻辑（保持不变，实时预览）------------
     const industries = ["金融","律师","投资","企业服务","咨询","科技","AI","区块链","餐饮","美容","美甲","健身","服装","烟酒","茶馆","汽修","建筑","室内","摄影","艺术家","插画","美陈","珠宝","风水","命理","道家","茶文化","香道","豪宅","私人会所","高定","奢侈品","游艇","红酒","DJ","潮牌","电竞","自媒体","街头文化"];
     const targets = ["企业老板","年轻女性","高净值客户","家庭用户","宝妈","Z世代","政府客户","投资人","外国客户","高端圈层","艺术圈","本地客户","游客客户"];
     const tastes = ["高级","极简","东方","科技","潮流","未来感","国潮","轻奢","暗黑","温暖","女性化","商务正式","艺术感","自然系","机械风","朋克","禅意","新中式","赛博朋克","苹果风","MUJI风","北欧","巴洛克","包豪斯"];
@@ -584,10 +604,21 @@
             const btn = document.createElement('div');
             btn.className = 'option-btn';
             btn.textContent = item;
-            if (!multiSelect && eval(`selected${callbackName.charAt(0).toUpperCase() + callbackName.slice(1)}`) === item) btn.classList.add('active');
-            if (multiSelect && callbackName === 'industry' && selectedIndustry.includes(item)) btn.classList.add('active');
-            if (multiSelect && callbackName === 'target' && selectedTarget.includes(item)) btn.classList.add('active');
-            if (multiSelect && callbackName === 'taste' && selectedTaste.includes(item)) btn.classList.add('active');
+            let isActive = false;
+            if (!multiSelect) {
+                if (callbackName === 'style' && selectedStyle === item) isActive = true;
+                if (callbackName === 'color' && selectedColor === item) isActive = true;
+                if (callbackName === 'material' && selectedMaterial === item) isActive = true;
+                if (callbackName === 'craft' && selectedCraft === item) isActive = true;
+                if (callbackName === 'orientation' && selectedOrientation === item) isActive = true;
+                if (callbackName === 'align' && selectedAlign === item) isActive = true;
+                if (callbackName === 'backfeature' && selectedBackFeature === item) isActive = true;
+            } else {
+                if (callbackName === 'industry' && selectedIndustry.includes(item)) isActive = true;
+                if (callbackName === 'target' && selectedTarget.includes(item)) isActive = true;
+                if (callbackName === 'taste' && selectedTaste.includes(item)) isActive = true;
+            }
+            if (isActive) btn.classList.add('active');
             btn.addEventListener('click', () => {
                 if (multiSelect) {
                     if (callbackName === 'industry') selectedIndustry = selectedIndustry.includes(item) ? selectedIndustry.filter(i => i !== item) : [...selectedIndustry, item];
@@ -662,18 +693,14 @@
     }
     bindInputs(); initGroups();
 
-    // 生成20组按钮事件
+    // 生成20组按钮事件：强制渲染，并确保可见且不会隐藏
     document.getElementById('generate20Btn').addEventListener('click', () => {
+        renderTwentyGroups();   // 生成内容覆盖原有占位符
         const gallery = document.getElementById('fullGalleryContainer');
-        if (!gallery.classList.contains('visible')) {
-            renderTwentyGroups();
-            gallery.classList.add('visible');
-        } else {
-            // 如果已经显示，确保仍然全部可见（不做隐藏）但为了符合“不能隐藏”，无关闭动作
-            // 若已可见，再次点击可重新渲染确保最新
-            renderTwentyGroups();
+        if (gallery) {
+            // 确保完全可见，滚动到视图
+            gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
-        gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
 </script>
 </body>
